@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Robo Genius — Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="header">
+    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Login / Register</h1></div>
+    <div class="top-actions"><button class="btn ghost" onclick="nav('index.html')">Home</button></div>
+  </div>
+  <nav class="main-nav container">
+    <a href="index.html">Home</a>
+    <a href="login.html" class="active">Login</a>
+    <a href="community.html">Community</a>
+  </nav>
+
+  <main class="container">
+    <div class="card" style="max-width:640px;margin:auto">
+      <h2>Create account or sign in</h2>
+      <input id="uName" class="input" placeholder="Username">
+      <input id="uPass" type="password" class="input" placeholder="Password" style="margin-top:8px">
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn" onclick="registerFromUI()">Register</button>
+        <button class="btn ghost" onclick="loginFromUI()">Login</button>
+        <button class="btn ghost" onclick="logout()">Logout</button>
+      </div>
+      <div id="loginInfo" class="small" style="margin-top:8px"></div>
+    </div>
+  </main>
+
+  <footer class="footer">© Robo Genius</footer>
+
+  <script src="app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    function nav(h){ location.href = h; }
+    function registerFromUI(){ const u=document.getElementById('uName').value.trim(); const p=document.getElementById('uPass').value; register(u,p); document.getElementById('loginInfo').textContent = 'Welcome '+(ACTIVE||''); }
+    function loginFromUI(){ const u=document.getElementById('uName').value.trim(); const p=document.getElementById('uPass').value; login(u,p); document.getElementById('loginInfo').textContent = 'Welcome '+(ACTIVE||''); }
+  </script>
+</body>
+</html>

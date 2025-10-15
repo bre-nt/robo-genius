@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Robo Genius — Home</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="header">
+    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Robo Genius</h1></div>
+    <div class="top-actions">
+      <button id="installBtn" class="btn" style="display:none" onclick="promptInstall()">Install App</button>
+      <button class="btn ghost" onclick="nav('login.html')">Login</button>
+    </div>
+  </div>
+  <nav class="main-nav container">
+    <a href="index.html" class="active">Home</a>
+    <a href="robotics.html">Robotics</a>
+    <a href="coding.html">Coding</a>
+    <a href="community.html">Community</a>
+    <a href="robolink.html">RoboLink</a>
+    <a href="contact.html">Ask Brent</a>
+  </nav>
+
+  <main class="container">
+    <div class="card">
+      <h2>Welcome to Robo Genius</h2>
+      <p class="small">A community and learning platform for robotics & coding. Install the app to save it on your phone.</p>
+      <div class="grid" style="margin-top:12px">
+        <div class="card">
+          <h3>Start Learning</h3>
+          <p class="small">Follow our step-by-step robotics & coding courses.</p>
+          <div style="margin-top:8px"><a href="robotics.html" class="btn">Open Robotics</a></div>
+        </div>
+        <div class="card">
+          <h3>Social Feed</h3>
+          <p class="small">Share projects, photos and follow others.</p>
+          <div style="margin-top:8px"><a href="community.html" class="btn">Open Community</a></div>
+        </div>
+        <div class="card">
+          <h3>Get Help</h3>
+          <p class="small">Contact Brent for mentorship and project support.</p>
+          <div style="margin-top:8px"><a href="contact.html" class="btn">Ask Brent</a></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">© 2025 Robo Genius — Built by Brent Bakwesiga</footer>
+
+  <script src="app.js"></script>
+  <script>
+    // register service worker
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    function nav(h){ location.href = h; }
+    // update UI elements
+    document.addEventListener('DOMContentLoaded', ()=>{ /* nothing heavy */ });
+  </script>
+</body>
+</html>

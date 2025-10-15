@@ -1,0 +1,44 @@
+:root{
+  --accent:#00a3ff; --accent2:#6de6ff;
+  --bg:#071025; --card:#0b1724; --muted:#9aa8bf; --text:#e6eef6;
+  --glass: rgba(255,255,255,0.03);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family:Inter,Segoe UI,system-ui,Arial;background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+.header{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  padding:18px;color:#012;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:44px;height:44px;border-radius:8px}
+.brand h1{margin:0;font-size:18px}
+.top-actions{display:flex;gap:8px}
+nav.main-nav{display:flex;gap:10px;padding:10px;background:#061124;justify-content:center;flex-wrap:wrap}
+nav.main-nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
+nav.main-nav a:hover, nav.main-nav a.active{background:var(--glass);color:var(--accent2)}
+.container{max-width:1100px;margin:18px auto;padding:16px}
+.card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.02)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.input, textarea, select{width:100%;padding:10px;border-radius:8px;border:none;background:#071827;color:var(--text)}
+.btn{background:var(--accent);color:#012;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+.post{background:#071a2a;padding:12px;border-radius:10px;margin-bottom:12px}
+.post img{max-width:100%;border-radius:8px;margin-top:8px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#083046;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted)}
+.chat-box{background:#071826;padding:12px;border-radius:10px;height:360px;overflow:auto}
+.chat-input{display:flex;gap:8px;margin-top:8px}
+.lesson{background:#07172a;padding:12px;border-radius:10px;margin-bottom:8px;border-left:4px solid var(--accent);cursor:pointer}
+.lesson .body{display:none;padding-top:8px}
+.code{background:#021826;padding:12px;border-radius:8px;color:var(--muted);overflow:auto;max-height:260px}
+.progress{height:12px;background:#041226;border-radius:8px;overflow:hidden}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+.footer{padding:12px;text-align:center;color:var(--muted);margin-top:18px}
+@media(max-width:900px){
+  .header{flex-direction:column;align-items:flex-start}
+  nav.main-nav{justify-content:flex-start;padding-left:12px}
+}

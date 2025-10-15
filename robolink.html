@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>RoboLink — Private Chat</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="header">
+    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>RoboLink (DMs)</h1></div>
+    <div class="top-actions"><button class="btn ghost" onclick="nav('index.html')">Home</button></div>
+  </div>
+  <nav class="main-nav container">
+    <a href="index.html">Home</a>
+    <a href="community.html">Community</a>
+    <a href="robolink.html" class="active">RoboLink</a>
+  </nav>
+
+  <main class="container">
+    <div class="card">
+      <h2>Private Messages</h2>
+      <div style="display:flex;gap:12px">
+        <div style="width:260px">
+          <input id="dmSearch" class="input" placeholder="Search users">
+          <div id="dmList" style="margin-top:12px"></div>
+        </div>
+        <div style="flex:1">
+          <h3 id="dmTitle">Select a user</h3>
+          <div id="dmBox" class="chat-box"></div>
+          <div class="chat-input">
+            <input id="dmText" class="input" placeholder="Type a private message">
+            <button class="btn" onclick="sendDMFromUI()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">© Robo Genius</footer>
+
+  <script src="app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    function nav(h){ location.href=h; }
+    function renderDMsUI(){ if(window.renderDMs) window.renderDMs(); document.getElementById('dmList').innerHTML = ''; Object.keys(db.users).forEach(u=>{ const div = document.createElement('div'); div.style.marginTop='6px'; div.innerHTML = `<strong>${u}</strong><div class="small">${db.users[u].bio||''}</div><div style="margin-top:6px"><button class="btn small" onclick="openDM('${u}')">Open</button></div>`; document.getElementById('dmList').appendChild(div); }); }
+    function openDM(user){ if(window.openDM) window.openDM(user); renderDMBoxUI(); }
+    function renderDMBoxUI(){ const box = document.getElementById('dmBox'); box.innerHTML=''; const user = ACTIVE || null; if(!ACTIVE) { box.innerHTML = '<div class="small">Login to use DMs</div>'; return; } const t = window.ACTIVE_DM || null; if(!t) { box.innerHTML = '<div class="small">Select a user on the left</div>'; return; } const conv = db.dms.find(d=>d.id=== ( [ACTIVE,t].sort().join('-') )); if(!conv) return; conv.messages.forEach(m=>{ const d = document.createElement('div'); d.style.marginBottom='8px'; d.innerHTML = `<strong>${m.user}</strong><div class="small">${timeAgo(m.time)} ago</div><div>${escapeHtml(m.text)}</div>`; box.appendChild(d); }); box.scrollTop = box.scrollHeight; }
+    function sendDMFromUI(){ const text = document.getElementById('dmText').value.trim(); const to = window.ACTIVE_DM; if(!to) return alert('Choose user'); sendDM(to,text); document.getElementById('dmText').value=''; renderDMBoxUI(); }
+    // small expose
+    window.renderDMsUI = renderDMsUI;
+    document.addEventListener('DOMContentLoaded', ()=>{ renderDMsUI(); });
+  </script>
+</body>
+</html>

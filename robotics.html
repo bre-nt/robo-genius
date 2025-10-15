@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Robo Genius — Robotics</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="header">
+    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Robotics — Robo Genius</h1></div>
+    <div class="top-actions">
+      <button class="btn ghost" onclick="nav('index.html')">Home</button>
+      <button id="installBtn2" class="btn" style="display:none" onclick="promptInstall()">Install</button>
+    </div>
+  </div>
+  <nav class="main-nav container">
+    <a href="index.html">Home</a>
+    <a href="robotics.html" class="active">Robotics</a>
+    <a href="coding.html">Coding</a>
+    <a href="community.html">Community</a>
+  </nav>
+
+  <main class="container">
+    <div class="card">
+      <h2>Robotics Mastery — Beginner to Advanced</h2>
+      <div class="small">Interactive lessons: mark complete, take quizzes, simulate Arduino code, download notes and follow challenge tasks.</div>
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <div style="flex:1">
+          <div class="card">
+            <h3>Progress</h3>
+            <div class="progress" style="margin-top:8px"><div id="roboticsProgress" style="width:0%"></div></div>
+            <div style="margin-top:8px"><button class="btn small" onclick="markAll('robotics',true)">Mark all complete</button> <button class="btn small ghost" onclick="markAll('robotics',false)">Reset</button></div>
+          </div>
+
+          <div id="robotLessons" style="margin-top:12px"></div>
+        </div>
+        <div style="width:360px">
+          <div class="card">
+            <h3>Simulator</h3>
+            <textarea id="robotCode" class="code">// Blink example
+int led = 13;
+void setup(){ pinMode(led, OUTPUT); Serial.begin(9600); }
+void loop(){ digitalWrite(led,HIGH); Serial.println("LED ON"); delay(1000); digitalWrite(led,LOW); Serial.println("LED OFF"); delay(1000); }</textarea>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button class="btn small" onclick="simulateArduino()">Simulate</button>
+              <button class="btn small ghost" onclick="downloadCode('robotCode','robot.ino')">Download</button>
+            </div>
+            <pre id="robotSerial" style="background:#021826;padding:8px;border-radius:6px;height:120px;overflow:auto;color:var(--muted)"></pre>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Resources</h3>
+            <ul class="small">
+              <li><a href="https://www.arduino.cc" target="_blank" style="color:var(--accent2)">Arduino docs</a></li>
+              <li><a href="https://wokwi.com" target="_blank" style="color:var(--accent2)">Wokwi simulator</a></li>
+              <li><a href="https://www.tinkercad.com" target="_blank" style="color:var(--accent2)">Tinkercad circuits</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px" class="card">
+        <h3>Quiz</h3>
+        <div id="robotQuiz" class="small"></div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer">© Robo Genius</footer>
+
+  <script src="app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    function nav(h){ location.href=h; }
+    // page init
+    function renderRoboticsPage(){
+      renderLessons('robotLessons', roboticsLessons, 'robotics');
+      renderRobotQuiz();
+      renderStories(); // reuse stories if present
+    }
+    // small helpers implementing using functions in app.js
+    function renderLessons(areaId, lessons, key){ window.renderLessons ? window.renderLessons(areaId, lessons, key) : (function(){ /* fallback */})(); }
+    // fallback: if app.js functions not available (should be), define local wrappers
+    window.markAll = function(key,val){ db.lessons = db.lessons || {}; db.lessons[key] = db.lessons[key] || {}; (key==='robotics'?roboticsLessons:[]).forEach(ls=> db.lessons[key][ls.id]=val); saveDB(); renderRoboticsPage(); };
+
+    // wiring to simulate Arduino: simple output based on Serial.println occurrences
+    function simulateArduino(){
+      const code = document.getElementById('robotCode').value;
+      const lines = code.split('\n');
+      const out = [];
+      lines.forEach(l=>{
+        const m = l.match(/Serial\.println\((.*)\)/);
+        if(m) {
+          try { out.push(eval(m[1])); } catch(e){ out.push(m[1].replace(/['"]/g,'')); }
+        }
+      });
+      document.getElementById('robotSerial').textContent = out.join('\n');
+    }
+
+    // small in-page roboticsLessons & quiz implementations when app.js not loaded yet
+    const roboticsLessons = [
+      {id:'r1',title:'Intro to Robotics',content:'Robotics = sensors + actuators + control.'},
+      {id:'r2',title:'Electronics Basics',content:'Voltage, current, breadboard basics.'},
+      {id:'r3',title:'Arduino Basics',content:'IDE, Blink, wiring.'},
+      {id:'r4',title:'Sensors',content:'Ultrasonic, IR, LDR, DHT.'},
+      {id:'r5',title:'Actuators & Motors',content:'DC motors, servos, motor drivers.'},
+      {id:'r6',title:'Projects: Line Follower',content:'IR sensors + code.'},
+      {id:'r7',title:'Projects: Obstacle Avoider',content:'HC-SR04 + code.'},
+      {id:'r8',title:'Advanced: Vision & ML',content:'Pi + OpenCV.'}
+    ];
+
+    function renderRobotQuiz(){
+      const el = document.getElementById('robotQuiz');
+      el.innerHTML = '<div>Which sensor uses sound to measure distance?</div><div style="margin-top:8px"><button class="btn small" onclick="alertAnswer(true)">Ultrasonic (HC-SR04)</button> <button class="btn small ghost" onclick="alertAnswer(false)">IR sensor</button></div>';
+    }
+    function alertAnswer(ok){ if(ok) alert('Correct!'); else alert('Not correct — try again.'); }
+
+    // call render on load
+    document.addEventListener('DOMContentLoaded', ()=>{ renderRoboticsPage(); });
+  </script>
+</body>
+</html>

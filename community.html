@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Robo Genius — Community</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="header">
+    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Community</h1></div>
+    <div class="top-actions"><button class="btn ghost" onclick="nav('index.html')">Home</button></div>
+  </div>
+  <nav class="main-nav container">
+    <a href="index.html">Home</a>
+    <a href="robotics.html">Robotics</a>
+    <a href="coding.html">Coding</a>
+    <a href="community.html" class="active">Community</a>
+  </nav>
+
+  <main class="container">
+    <div class="card">
+      <h2>Community Feed</h2>
+      <div class="small">Share projects, photos, and short stories. Like, comment, and follow other members.</div>
+      <div style="margin-top:12px">
+        <input id="postText" class="input" placeholder="Share a project or story...">
+        <input id="postImage" type="file" accept="image/*" style="margin-top:8px">
+        <div style="margin-top:8px"><button class="btn" onclick="createPostFromUI()">Post</button></div>
+      </div>
+      <div id="postsList" style="margin-top:12px"></div>
+    </div>
+
+    <div style="margin-top:12px" class="card">
+      <h3>Stories & Gallery</h3>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1">
+          <input id="storyImg" type="file" accept="image/*">
+          <div style="margin-top:8px"><button class="btn" onclick="postStoryFromUI()">Share Story</button></div>
+          <div id="storyList" style="margin-top:12px"></div>
+        </div>
+        <div style="width:320px">
+          <h4 class="small">Trending Projects</h4>
+          <div id="trending" class="small"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">© Robo Genius</footer>
+
+  <script src="app.js"></script>
+  <script>
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+    function nav(h){ location.href=h; }
+    function createPostFromUI(){ const t=document.getElementById('postText').value.trim(); const f=document.getElementById('postImage').files[0]; createPost(t,f); document.getElementById('postText').value=''; document.getElementById('postImage').value=''; }
+    function renderFeed(){ /* delegate */ if(window.renderFeed) window.renderFeed(); }
+    // wire rendering
+    document.addEventListener('DOMContentLoaded', ()=>{ renderFeed(); renderStories(); renderSuggestions(); renderTrending(); });
+    function createPost(){ if(window.createPost) return window.createPost.apply(null, arguments); }
+    function renderSuggestions(){ const el = document.getElementById('trending'); el.innerHTML=''; db.posts.slice(0,5).forEach(p=>{ const d = document.createElement('div'); d.className='small'; d.textContent = p.author + ': ' + (p.text||''); el.appendChild(d); }); }
+    function postStoryFromUI(){ const f=document.getElementById('storyImg').files[0]; if(!f) return alert('Choose image'); postStory(f); document.getElementById('storyImg').value=''; renderStories(); }
+  </script>
+</body>
+</html>
