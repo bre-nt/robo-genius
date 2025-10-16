@@ -1,61 +1,312 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Robo Genius — Home</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Robo Genius — Community</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0d1117;
+      color: #eee;
+      overflow-x: hidden;
+    }
+
+    header, .header {
+      background: #161b22;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .brand h1 {
+      font-size: 1.4rem;
+      color: #00bcd4;
+    }
+
+    nav {
+      background: #1c2128;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav a.active, nav a:hover {
+      color: #00bcd4;
+      text-shadow: 0 0 8px #00bcd4;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: #161b22;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease;
+    }
+
+    h2, h3, h4 {
+      color: #00bcd4;
+    }
+
+    input[type="text"], input[type="file"], textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 8px;
+      background: #0d1117;
+      color: #eee;
+    }
+
+    .btn {
+      background: #00bcd4;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #0097a7;
+      transform: scale(1.05);
+    }
+
+    .post {
+      background: #0d1117;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 12px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    .post img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .small {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .like-btn {
+      color: #00bcd4;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 15px;
+      transition: 0.3s;
+    }
+
+    .like-btn:hover {
+      color: #0097a7;
+    }
+
+    .comment {
+      background: #1c2128;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      padding: 15px;
+      background: #161b22;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Floating Chat Assistant */
+    .floating-smiley {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00bcd4;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+
+    .floating-smiley:hover {
+      transform: rotate(15deg) scale(1.1);
+      background: #0097a7;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: #1c2128;
+      border-radius: 10px;
+      padding: 15px;
+      color: white;
+      width: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      z-index: 99;
+    }
+  </style>
 </head>
 <body>
+
   <div class="header">
-    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Robo Genius</h1></div>
-    <div class="top-actions">
-      <button id="installBtn" class="btn" style="display:none" onclick="promptInstall()">Install App</button>
-      <button class="btn ghost" onclick="nav('login.html')">Login</button>
+    <div class="brand">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png">
+      <h1>Robo Genius Community</h1>
     </div>
+    <div class="top-actions"><button class="btn" onclick="location.href='index.html'">Home</button></div>
   </div>
-  <nav class="main-nav container">
-    <a href="index.html" class="active">Home</a>
+
+  <nav>
+    <a href="index.html">Home</a>
     <a href="robotics.html">Robotics</a>
     <a href="coding.html">Coding</a>
-    <a href="community.html">Community</a>
-    <a href="robolink.html">RoboLink</a>
-    <a href="contact.html">Ask Brent</a>
+    <a href="community.html" class="active">Community</a>
+    <a href="app.html">App</a>
   </nav>
 
   <main class="container">
     <div class="card">
-      <h2>Welcome to Robo Genius</h2>
-      <p class="small">A community and learning platform for robotics & coding. Install the app to save it on your phone.</p>
-      <div class="grid" style="margin-top:12px">
-        <div class="card">
-          <h3>Start Learning</h3>
-          <p class="small">Follow our step-by-step robotics & coding courses.</p>
-          <div style="margin-top:8px"><a href="robotics.html" class="btn">Open Robotics</a></div>
-        </div>
-        <div class="card">
-          <h3>Social Feed</h3>
-          <p class="small">Share projects, photos and follow others.</p>
-          <div style="margin-top:8px"><a href="community.html" class="btn">Open Community</a></div>
-        </div>
-        <div class="card">
-          <h3>Get Help</h3>
-          <p class="small">Contact Brent for mentorship and project support.</p>
-          <div style="margin-top:8px"><a href="contact.html" class="btn">Ask Brent</a></div>
-        </div>
-      </div>
+      <h2>Community Feed</h2>
+      <p class="small">Share your robotics projects, photos, or stories! Connect with learners like you 💡</p>
+      <textarea id="postText" placeholder="What's new in your robotics world?"></textarea>
+      <input id="postImage" type="file" accept="image/*">
+      <div style="margin-top:10px;"><button class="btn" onclick="createPost()">Post</button></div>
+      <div id="postsList"></div>
     </div>
   </main>
 
-  <footer class="footer">© 2025 Robo Genius — Built by Brent Bakwesiga</footer>
+  <footer>© 2025 Robo Genius by Brent | Learn • Create • Connect</footer>
 
-  <script src="app.js"></script>
+  <div class="floating-smiley" onclick="togglePopup()">😊</div>
+  <div class="popup" id="popup">
+    <p>Hey there! I'm <b>Brent 🤖</b>.<br>Need help or want to share something cool? Jump into the feed and post your ideas!</p>
+  </div>
+
   <script>
-    // register service worker
-    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-    function nav(h){ location.href = h; }
-    // update UI elements
-    document.addEventListener('DOMContentLoaded', ()=>{ /* nothing heavy */ });
+    const postsList = document.getElementById("postsList");
+    const popup = document.getElementById("popup");
+
+    function togglePopup(){
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    let posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+    function savePosts(){
+      localStorage.setItem("posts", JSON.stringify(posts));
+    }
+
+    function renderPosts(){
+      postsList.innerHTML = "";
+      posts.slice().reverse().forEach((post, i) => {
+        const div = document.createElement("div");
+        div.className = "post";
+        div.innerHTML = `
+          <div><b>${post.author || "User"}</b></div>
+          <div>${post.text}</div>
+          ${post.image ? `<img src="${post.image}" alt="Post image">` : ""}
+          <div class="small">
+            <span class="like-btn" onclick="likePost(${i})">❤️ ${post.likes || 0}</span>
+            <span class="like-btn" onclick="commentPost(${i})">💬 Comment</span>
+          </div>
+          ${post.comments?.map(c => `<div class='comment'>💭 ${c}</div>`).join("") || ""}
+        `;
+        postsList.appendChild(div);
+      });
+    }
+
+    function createPost(){
+      const text = document.getElementById("postText").value.trim();
+      const file = document.getElementById("postImage").files[0];
+      if(!text && !file) return alert("Please write something or add an image!");
+
+      const post = { text, author: "Brent User", likes: 0, comments: [] };
+
+      if(file){
+        const reader = new FileReader();
+        reader.onload = e => {
+          post.image = e.target.result;
+          posts.push(post);
+          savePosts();
+          renderPosts();
+        };
+        reader.readAsDataURL(file);
+      } else {
+        posts.push(post);
+        savePosts();
+        renderPosts();
+      }
+
+      document.getElementById("postText").value = "";
+      document.getElementById("postImage").value = "";
+    }
+
+    function likePost(i){
+      posts[i].likes = (posts[i].likes || 0) + 1;
+      savePosts();
+      renderPosts();
+    }
+
+    function commentPost(i){
+      const comment = prompt("Add a comment:");
+      if(comment){
+        posts[i].comments = posts[i].comments || [];
+        posts[i].comments.push(comment);
+        savePosts();
+        renderPosts();
+      }
+    }
+
+    renderPosts();
   </script>
 </body>
 </html>
