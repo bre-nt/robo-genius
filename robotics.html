@@ -1,121 +1,671 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Robo Genius — Robotics</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Robo Genius — Robotics Academy</title>
+
+  <!-- Keep your global site stylesheet for consistent look -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- PWA manifest (optional) -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- Page-specific styles -->
+  <style>
+    :root{
+      --accent:#00a3ff; --accent2:#6de6ff; --bg:#071025; --card:#0b1724; --muted:#9aa8bf; --text:#e6eef6;
+    }
+    body{background:linear-gradient(180deg,#030617 0%, #071025 45%, #071b2b 100%);color:var(--text);margin:0;font-family:Inter,Segoe UI,system-ui,Arial;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#012}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand img{width:56px;height:56px;border-radius:10px}
+    .brand h1{margin:0;font-size:20px}
+    nav.page-nav{display:flex;gap:10px;justify-content:center;padding:10px;background:#061124;flex-wrap:wrap}
+    nav.page-nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav.page-nav a.active{background:rgba(255,255,255,0.04);color:var(--accent2)}
+    .container{max-width:1100px;margin:20px auto;padding:12px}
+    .panel{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.02)}
+    .hero{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
+    h2{color:var(--accent);margin:0 0 8px 0}
+    .small{font-size:13px;color:var(--muted)}
+    .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+    .level{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-left:6px solid var(--accent);cursor:pointer}
+    .lesson{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent)}
+    .video-wrap{margin-top:10px;border-radius:10px;overflow:hidden}
+    .video-wrap iframe{width:100%;height:260px;border:0}
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+    .media-grid img{width:100%;height:100px;object-fit:cover;border-radius:8px}
+    .quiz{margin-top:10px}
+    .qbtn{display:block;margin:8px 0;padding:10px;border-radius:8px;border:none;background:#06253a;color:var(--muted);cursor:pointer;width:100%;text-align:left}
+    .progress{height:14px;background:#041226;border-radius:999px;overflow:hidden;margin-top:8px}
+    .progress>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+    .sim-area{margin-top:10px}
+    .code{background:#021826;padding:12px;border-radius:8px;color:var(--muted);font-family:monospace;height:160px;overflow:auto;border:1px solid rgba(255,255,255,0.02)}
+    .serial{background:#021826;padding:10px;border-radius:8px;height:120px;overflow:auto;margin-top:8px;color:var(--muted);border:1px solid rgba(255,255,255,0.02)}
+    .right-column{position:sticky;top:18px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .badge{background:linear-gradient(90deg,#062e44,#0a3f55);padding:6px 10px;border-radius:999px;color:var(--muted);font-weight:700}
+    .project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
+    .project{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:8px;border-radius:8px}
+    .comments{margin-top:10px}
+    .comment{background:#0f2136;padding:8px;border-radius:8px;margin-top:8px}
+    .mentor-floating{position:fixed;right:18px;bottom:18px;z-index:9999}
+    /* pulsing color-changing smiley */
+    .smiley-btn{
+      width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.6);border:2px solid rgba(255,255,255,0.06);
+      background:linear-gradient(135deg,#00a3ff,#6de6ff);
+      animation:glow 4s linear infinite, spinHue 10s linear infinite;
+      filter:drop-shadow(0 6px 20px rgba(0,0,0,0.6));
+    }
+    .smiley-inner{font-size:30px;transform:translateY(-2px)}
+    @keyframes glow{
+      0%{box-shadow:0 6px 20px rgba(0,163,255,0.35)}
+      50%{box-shadow:0 10px 40px rgba(109,230,255,0.45)}
+      100%{box-shadow:0 6px 20px rgba(0,163,255,0.35)}
+    }
+    /* hue rotation to slowly change the color */
+    @keyframes spinHue{
+      0%{filter: hue-rotate(0deg) drop-shadow(0 10px 30px rgba(0,163,255,0.25))}
+      50%{filter: hue-rotate(120deg) drop-shadow(0 10px 30px rgba(109,230,255,0.25))}
+      100%{filter: hue-rotate(360deg) drop-shadow(0 10px 30px rgba(0,163,255,0.25))}
+    }
+    .chat-panel{position:fixed;right:96px;bottom:18px;width:360px;background:#031523;border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.02);box-shadow:0 24px 60px rgba(0,0,0,0.6);z-index:9998;display:none}
+    .chat-panel .chat{height:260px;overflow:auto;background:#021826;padding:8px;border-radius:8px}
+    .chat-panel .input{display:flex;gap:8px;margin-top:8px}
+    .chat-panel .input input{flex:1;padding:8px;border-radius:8px;background:#071827;border:1px solid #123;color:var(--text)}
+    .cert-canvas{width:100%;border-radius:8px;background:#fff}
+    .center{display:flex;align-items:center;justify-content:center}
+    @media(max-width:980px){ .hero{grid-template-columns:1fr} .chat-panel{right:12px;width:calc(100% - 140px)} }
+  </style>
 </head>
 <body>
-  <div class="header">
-    <div class="brand"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png"><h1>Robotics — Robo Genius</h1></div>
-    <div class="top-actions">
-      <button class="btn ghost" onclick="nav('index.html')">Home</button>
-      <button id="installBtn2" class="btn" style="display:none" onclick="promptInstall()">Install</button>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png" alt="logo">
+      <div>
+        <h1>🤖 Robo Genius — Robotics Academy</h1>
+        <div class="small">Learn robotics step-by-step with Brent's lessons, projects & AI tutor</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn" onclick="location.href='index.html'">Home</button>
+      <button class="btn ghost" id="installBtn" style="display:none" onclick="promptInstall()">Install App</button>
     </div>
   </div>
-  <nav class="main-nav container">
-    <a href="index.html">Home</a>
-    <a href="robotics.html" class="active">Robotics</a>
-    <a href="coding.html">Coding</a>
-    <a href="community.html">Community</a>
+
+  <!-- NAV -->
+  <nav class="page-nav">
+    <a href="#beginner" class="active">Beginner</a>
+    <a href="#intermediate">Intermediate</a>
+    <a href="#advanced">Advanced</a>
+    <a href="#projects">Projects</a>
+    <a href="#mentor">BrentBot</a>
   </nav>
 
-  <main class="container">
-    <div class="card">
-      <h2>Robotics Mastery — Beginner to Advanced</h2>
-      <div class="small">Interactive lessons: mark complete, take quizzes, simulate Arduino code, download notes and follow challenge tasks.</div>
-      <div style="display:flex;gap:12px;margin-top:12px">
-        <div style="flex:1">
-          <div class="card">
-            <h3>Progress</h3>
-            <div class="progress" style="margin-top:8px"><div id="roboticsProgress" style="width:0%"></div></div>
-            <div style="margin-top:8px"><button class="btn small" onclick="markAll('robotics',true)">Mark all complete</button> <button class="btn small ghost" onclick="markAll('robotics',false)">Reset</button></div>
-          </div>
+  <div class="container">
+    <main class="panel hero" style="padding:18px">
+      <!-- LEFT: Lessons -->
+      <div>
+        <section id="beginner">
+          <h2>Beginner — Foundations</h2>
+          <p class="small">Start here if you are new. Learn basic electronics, Arduino, and simple sensors.</p>
 
-          <div id="robotLessons" style="margin-top:12px"></div>
-        </div>
-        <div style="width:360px">
-          <div class="card">
-            <h3>Simulator</h3>
-            <textarea id="robotCode" class="code">// Blink example
-int led = 13;
-void setup(){ pinMode(led, OUTPUT); Serial.begin(9600); }
-void loop(){ digitalWrite(led,HIGH); Serial.println("LED ON"); delay(1000); digitalWrite(led,LOW); Serial.println("LED OFF"); delay(1000); }</textarea>
-            <div style="margin-top:8px;display:flex;gap:8px">
-              <button class="btn small" onclick="simulateArduino()">Simulate</button>
-              <button class="btn small ghost" onclick="downloadCode('robotCode','robot.ino')">Download</button>
+          <!-- Lesson B1 -->
+          <article class="lesson" data-id="b1">
+            <h3>Lesson B1 — Electricity & Safety</h3>
+            <p>Understand voltage, current, resistance, and safe handling. Learn to read a multimeter and use a breadboard.</p>
+            <div class="media-grid">
+              <img src="https://cdn.sparkfun.com/assets/parts/1/1/6/3/8/14721-Breadboard-with-720-Points-02.jpg" alt="breadboard">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Ohm-Volt-Ampere-illustration.svg" alt="ohm law">
+              <img src="https://cdn.pixabay.com/photo/2017/06/14/13/00/electric-2407802_1280.jpg" alt="electric">
             </div>
-            <pre id="robotSerial" style="background:#021826;padding:8px;border-radius:6px;height:120px;overflow:auto;color:var(--muted)"></pre>
-          </div>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/VhtqPq2hQ6g" title="Electricity basics" allowfullscreen></iframe>
+            </div>
+            <div class="brent-tip small" style="margin-top:8px">Brent's tip: Always cut power when wiring. Start with low voltages — 5V/12V — and test with a multimeter.</div>
 
-          <div class="card" style="margin-top:12px">
-            <h3>Resources</h3>
-            <ul class="small">
-              <li><a href="https://www.arduino.cc" target="_blank" style="color:var(--accent2)">Arduino docs</a></li>
-              <li><a href="https://wokwi.com" target="_blank" style="color:var(--accent2)">Wokwi simulator</a></li>
-              <li><a href="https://www.tinkercad.com" target="_blank" style="color:var(--accent2)">Tinkercad circuits</a></li>
-            </ul>
+            <div class="quiz">
+              <div class="small">Quick check — what does a resistor do?</div>
+              <button class="qbtn" onclick="pageAnswer('b1','reduces current')">Reduces current (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('b1','increases voltage')">Increases voltage</button>
+              <button class="qbtn" onclick="pageAnswer('b1','stores energy')">Stores energy</button>
+            </div>
+          </article>
+
+          <!-- Lesson B2 -->
+          <article class="lesson" data-id="b2">
+            <h3>Lesson B2 — Arduino & Blink</h3>
+            <p>Introduction to Arduino UNO: pins, IDE, upload, and the Blink sketch. We'll practice with a simulator below.</p>
+            <img src="https://content.arduino.cc/assets/UNO-0.jpg" alt="arduino" style="width:100%;border-radius:8px;margin-top:8px">
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/CqrQmQqpHXc" title="Arduino Blink" allowfullscreen></iframe>
+            </div>
+
+            <div class="sim-area">
+              <div class="small">Simulator: copy the code and press <b>Simulate</b>. The simulator extracts Serial.println outputs for practice.</div>
+              <textarea id="code-b2" class="code">// Blink + Serial example
+int led = 13;
+void setup(){
+  pinMode(led, OUTPUT);
+  Serial.begin(9600);
+}
+void loop(){
+  digitalWrite(led, HIGH);
+  Serial.println("LED ON");
+  delay(500);
+  digitalWrite(led, LOW);
+  Serial.println("LED OFF");
+  delay(500);
+}</textarea>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button class="btn" onclick="simulateLessonCode('code-b2','out-b2')">Simulate</button>
+                <button class="btn ghost" onclick="downloadLessonCode('code-b2','blink.ino')">Download .ino</button>
+                <button class="btn ghost" onclick="explainCode('code-b2')">Explain (BrentBot)</button>
+              </div>
+              <pre id="out-b2" class="serial"></pre>
+            </div>
+
+            <div class="quiz">
+              <div class="small">What are the two main functions in a sketch?</div>
+              <button class="qbtn" onclick="pageAnswer('b2','setup & loop')">setup & loop (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('b2','start & stop')">start & stop</button>
+            </div>
+          </article>
+
+          <!-- Lesson B3 -->
+          <article class="lesson" data-id="b3">
+            <h3>Lesson B3 — Basic Sensors (LDR, DHT, IR)</h3>
+            <p>Learn how sensors work: analog vs digital, reading values using analogRead/digitalRead.</p>
+            <div class="media-grid">
+              <img src="https://cdn.sparkfun.com/assets/parts/1/3/2/6/1/14525-LDR-Photoresistor-01.jpg" alt="ldr">
+              <img src="https://cdn.sparkfun.com/assets/parts/1/2/3/3/3/14688-DHT11-01.jpg" alt="dht">
+              <img src="https://cdn.sparkfun.com/assets/parts/1/1/0/0/3/12015-IR-Sensor-01.jpg" alt="ir">
+            </div>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/9yp0xk1Bf4U" title="Sensors intro" allowfullscreen></iframe>
+            </div>
+
+            <div class="quiz">
+              <div class="small">Which sensor measures temperature & humidity?</div>
+              <button class="qbtn" onclick="pageAnswer('b3','dht')">DHT (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('b3','ldr')">LDR</button>
+            </div>
+          </article>
+        </section>
+
+        <!-- INTERMEDIATE -->
+        <section id="intermediate" style="margin-top:18px">
+          <h2>Intermediate — Building Robots</h2>
+          <p class="small">Combine sensors, motors and logic to build moving robots.</p>
+
+          <article class="lesson" data-id="i1">
+            <h3>Motors & Motor Drivers</h3>
+            <p>Learn DC motors, servo and stepper motors. Use motor drivers (L298N/TB6612) for direction and speed control.</p>
+            <div class="media-grid">
+              <img src="https://cdn.sparkfun.com/assets/parts/1/3/4/5/9/13302-01.jpg" alt="motor driver">
+              <img src="https://cdn.pixabay.com/photo/2016/11/29/02/24/robot-1869564_1280.jpg" alt="chassis">
+            </div>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/Fye1ZVfPISo" title="Motor control" allowfullscreen></iframe>
+            </div>
+            <div class="quiz">
+              <div class="small">Which pin type controls speed with PWM?</div>
+              <button class="qbtn" onclick="pageAnswer('i1','digital pwm pin')">Digital PWM pin (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('i1','analog input')">Analog input</button>
+            </div>
+          </article>
+
+          <article class="lesson" data-id="i2">
+            <h3>Line Follower Robot</h3>
+            <p>Use IR reflector sensors to detect black/white lines and follow them with simple logic.</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/Tf1Zr7g3JFo" title="Line follower" allowfullscreen></iframe>
+            </div>
+            <pre class="code">// Basic logic pseudocode
+if(leftSensor == BLACK && rightSensor == WHITE) turnLeft();
+else if(leftSensor == WHITE && rightSensor == BLACK) turnRight();
+else moveForward();</pre>
+            <div class="quiz">
+              <div class="small">Which sensors are commonly used for line following?</div>
+              <button class="qbtn" onclick="pageAnswer('i2','ir sensors')">IR sensors (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('i2','ultrasonic')">Ultrasonic</button>
+            </div>
+          </article>
+
+          <article class="lesson" data-id="i3">
+            <h3>Ultrasonic Obstacle Avoider</h3>
+            <p>Use HC-SR04 ultrasonic sensor to measure distance and avoid collisions.</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/Qq7Qb1W3Y8w" title="Ultrasonic" allowfullscreen></iframe>
+            </div>
+            <div class="quiz">
+              <div class="small">What does the HC-SR04 measure?</div>
+              <button class="qbtn" onclick="pageAnswer('i3','distance')">Distance (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('i3','temperature')">Temperature</button>
+            </div>
+          </article>
+        </section>
+
+        <!-- ADVANCED -->
+        <section id="advanced" style="margin-top:18px">
+          <h2>Advanced — Vision, AI & Drones</h2>
+          <p class="small">Move from controlling hardware to adding intelligence — vision, ML and communication.</p>
+
+          <article class="lesson" data-id="a1">
+            <h3>Computer Vision (OpenCV)</h3>
+            <p>Use Python + OpenCV on Raspberry Pi for object detection, tracking, and image processing.</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/01sAkU_NvOY" title="OpenCV basics" allowfullscreen></iframe>
+            </div>
+            <div class="quiz">
+              <div class="small">Which library helps process images in Python?</div>
+              <button class="qbtn" onclick="pageAnswer('a1','opencv')">OpenCV (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('a1','numpy')">Numpy</button>
+            </div>
+          </article>
+
+          <article class="lesson" data-id="a2">
+            <h3>AI & TinyML</h3>
+            <p>Train small models to run on edge devices (TensorFlow Lite, Edge TPU). Example: classify simple gestures or detect obstacles from camera feed.</p>
+            <div class="media-grid">
+              <img src="https://cdn.pixabay.com/photo/2017/08/10/03/48/artificial-intelligence-2617268_1280.jpg" alt="ai">
+              <img src="https://cdn.pixabay.com/photo/2019/05/08/16/49/robot-4187862_1280.jpg" alt="robot-ai">
+            </div>
+            <div class="quiz">
+              <div class="small">What is TinyML used for?</div>
+              <button class="qbtn" onclick="pageAnswer('a2','run ml on small devices')">Run ML on small devices (correct)</button>
+              <button class="qbtn" onclick="pageAnswer('a2','big server only')">Only on servers</button>
+            </div>
+          </article>
+
+          <article class="lesson" data-id="a3">
+            <h3>Drone Basics & Flight Control</h3>
+            <p>How gyroscopes, ESCs and flight controllers keep drones stable. Learn to build and test simple drones safely.</p>
+            <div class="video-wrap">
+              <iframe src="https://www.youtube.com/embed/hvA4RVBVBY4" title="Drone basics" allowfullscreen></iframe>
+            </div>
+          </article>
+        </section>
+
+        <!-- RESOURCES -->
+        <section id="resources" style="margin-top:18px">
+          <h2>Resources & Downloads</h2>
+          <p class="small">Reference links, datasheets and printable wiring diagrams.</p>
+          <ul>
+            <li><a href="https://www.arduino.cc" target="_blank" style="color:var(--accent2)">Arduino Official</a></li>
+            <li><a href="https://wokwi.com" target="_blank" style="color:var(--accent2)">Wokwi - online simulator</a></li>
+            <li><a href="https://opencv.org" target="_blank" style="color:var(--accent2)">OpenCV</a></li>
+            <li><a href="#" onclick="downloadSample('wiring-guide.pdf')">Download wiring guide (sample)</a></li>
+          </ul>
+        </section>
+
+        <!-- QUIZ ZONE -->
+        <section id="quiz-zone" style="margin-top:18px">
+          <h2>Test Your Knowledge</h2>
+          <div id="multiQuiz" class="panel"></div>
+        </section>
+
+        <!-- COMMUNITY -->
+        <section id="community" style="margin-top:18px">
+          <h2>Community Wall & Project Showcase</h2>
+          <p class="small">Share progress, ask for help or post pictures of your robots.</p>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="yourName" placeholder="Your name" class="small" style="padding:8px;border-radius:8px;background:#071827;border:1px solid #123;color:var(--text)">
+            <input id="yourPic" type="file" accept="image/*">
+          </div>
+          <textarea id="yourPost" rows="3" style="width:100%;margin-top:8px;padding:8px;border-radius:8px;background:#071827;border:1px solid #123;color:var(--text)"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" onclick="postCommunity()">Post</button><button class="btn ghost" onclick="clearCommunity()">Clear</button></div>
+          <div id="communityFeed" class="comments"></div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: progress, simulator, leaderboard, cert preview -->
+      <aside class="right-column" style="width:320px">
+        <div class="panel">
+          <h3>Progress & Badges</h3>
+          <div class="small">Your course progress and earned badges</div>
+          <div class="progress"><div id="progressBar" style="width:0%"></div></div>
+          <div id="badges" class="badges"></div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn small" onclick="resetAll()">Reset</button>
+            <button class="btn small ghost" onclick="awardSampleBadge()">Award Demo Badge</button>
           </div>
         </div>
-      </div>
-      <div style="margin-top:12px" class="card">
-        <h3>Quiz</h3>
-        <div id="robotQuiz" class="small"></div>
-      </div>
+
+        <div class="panel" style="margin-top:12px">
+          <h3>Quick Simulator</h3>
+          <textarea id="quickCode" class="code">// Quick example
+void setup(){ Serial.begin(9600); }
+void loop(){ Serial.println("ping"); delay(1000); }</textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn small" onclick="runQuick()">Run</button>
+            <button class="btn small ghost" onclick="stopQuick()">Stop</button>
+          </div>
+          <pre id="quickOut" class="serial"></pre>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <h3>Leaderboard (local)</h3>
+          <div id="leaderboard" class="small"></div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <h3>Certificate Preview</h3>
+          <canvas id="certCanvas" width="300" height="180" style="border-radius:8px;background:#fff"></canvas>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button class="btn small" onclick="previewCert()">Preview</button>
+            <button class="btn small ghost" onclick="downloadCert()">Download</button>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+  </div>
+
+  <footer style="text-align:center;padding:18px;color:var(--muted)">© 2025 Robo Genius — Built with ❤️ by Brent Bakwesiga</footer>
+
+  <!-- Floating pulsing color-changing smiley (BrentBot button) -->
+  <div class="mentor-floating">
+    <div class="smiley-btn" id="smileyBtn" title="Open BrentBot (AI Tutor)">
+      <div class="smiley-inner">😊</div>
     </div>
-  </main>
-  <footer class="footer">© Robo Genius</footer>
+  </div>
 
-  <script src="app.js"></script>
+  <!-- Chat panel (hidden by default) -->
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="BrentBot AI Tutor">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:8px;align-items:center">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712025.png" width="44" style="border-radius:8px">
+        <div>
+          <div style="font-weight:800">BrentBot — AI Robotics Tutor</div>
+          <div class="small">Ask wiring, code or project questions</div>
+        </div>
+      </div>
+      <div><button class="btn ghost" id="closeChat">✕</button></div>
+    </div>
+
+    <div class="chat" id="botChat" style="margin-top:8px;height:220px;overflow:auto;background:#021826;padding:8px;border-radius:8px"></div>
+
+    <div class="input" style="margin-top:8px;display:flex;gap:8px">
+      <input id="botInput" placeholder="Ask BrentBot (e.g., 'how to wire HC-SR04?')" style="flex:1;padding:8px;border-radius:8px;background:#071827;border:1px solid #123;color:var(--text)">
+      <button class="btn" id="askBtn">Ask</button>
+    </div>
+    <div style="margin-top:8px;text-align:center" class="small">BrentBot is an on-page AI-style tutor (scripted replies). For more help, post to the community wall.</div>
+  </div>
+
+  <!-- Page-specific script -->
   <script>
-    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-    function nav(h){ location.href=h; }
-    // page init
-    function renderRoboticsPage(){
-      renderLessons('robotLessons', roboticsLessons, 'robotics');
-      renderRobotQuiz();
-      renderStories(); // reuse stories if present
+  // Keys and state
+  const RK = 'rg_robotics_academy_v2';
+  let state = JSON.parse(localStorage.getItem(RK) || '{}');
+  if(!state.progress) state.progress = {};
+  if(!state.badges) state.badges = [];
+  if(!state.score) state.score = 0;
+  if(!state.community) state.community = JSON.parse(localStorage.getItem('rg_community') || '[]');
+  if(!state.leaderboard) state.leaderboard = JSON.parse(localStorage.getItem('rg_leaderboard') || '[]');
+
+  // helper functions
+  function saveState(){ localStorage.setItem(RK, JSON.stringify(state)); renderProgress(); renderBadges(); renderCommunity(); renderLeaderboard(); updateCertCanvas(); }
+  function escapeHtml(s){ return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function timeAgo(ts){ const s=Math.floor((Date.now()-ts)/1000); if(s<60) return s+'s ago'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }
+
+  // pageAnswer (for lesson quizzes)
+  function pageAnswer(lessonId, answer){
+    const map = {
+      'b1':'reduces current',
+      'b2':'setup & loop',
+      'b3':'dht',
+      'i1':'digital pwm pin',
+      'i2':'ir sensors',
+      'i3':'distance',
+      'a1':'opencv',
+      'a2':'run ml on small devices'
+    };
+    const correct = (String(answer).toLowerCase().includes(map[lessonId] || '') || /correct/.test(String(answer).toLowerCase()));
+    if(correct){
+      if(!state.progress[lessonId]){
+        state.progress[lessonId] = true;
+        state.score = (state.score||0) + 10;
+        awardBadges();
+        saveState();
+        playTone('win');
+        alert('✅ Correct — lesson marked complete');
+      } else {
+        alert('✅ Correct — already completed');
+      }
+    } else {
+      playTone('error');
+      alert('❌ Not quite — try again or review the lesson');
     }
-    // small helpers implementing using functions in app.js
-    function renderLessons(areaId, lessons, key){ window.renderLessons ? window.renderLessons(areaId, lessons, key) : (function(){ /* fallback */})(); }
-    // fallback: if app.js functions not available (should be), define local wrappers
-    window.markAll = function(key,val){ db.lessons = db.lessons || {}; db.lessons[key] = db.lessons[key] || {}; (key==='robotics'?roboticsLessons:[]).forEach(ls=> db.lessons[key][ls.id]=val); saveDB(); renderRoboticsPage(); };
+  }
 
-    // wiring to simulate Arduino: simple output based on Serial.println occurrences
-    function simulateArduino(){
-      const code = document.getElementById('robotCode').value;
-      const lines = code.split('\n');
-      const out = [];
-      lines.forEach(l=>{
-        const m = l.match(/Serial\.println\((.*)\)/);
-        if(m) {
-          try { out.push(eval(m[1])); } catch(e){ out.push(m[1].replace(/['"]/g,'')); }
-        }
-      });
-      document.getElementById('robotSerial').textContent = out.join('\n');
+  // badges
+  function awardBadges(){
+    const done = Object.keys(state.progress).length;
+    if(done >= 3 && !state.badges.includes('Beginner Bot')) state.badges.push('Beginner Bot');
+    if(done >= 6 && !state.badges.includes('Arduino Pro')) state.badges.push('Arduino Pro');
+    if(done >= 9 && !state.badges.includes('AI Master')) state.badges.push('AI Master');
+  }
+  function renderBadges(){
+    const el = document.getElementById('badges'); if(!el) return; el.innerHTML = '';
+    state.badges.forEach(b=>{ const d = document.createElement('div'); d.className='badge'; d.textContent = b; el.appendChild(d); });
+  }
+
+  // progress rendering
+  function renderProgress(){
+    const total = document.querySelectorAll('.lesson').length || 1;
+    const done = Object.keys(state.progress).length;
+    const pct = Math.round(done/total*100);
+    const bar = document.getElementById('progressBar'); if(bar) bar.style.width = pct + '%';
+  }
+
+  // simulator: extract Serial.println(...) values and print them repeatedly
+  let simTimer = null;
+  function simulateLessonCode(codeId, outId){
+    const code = document.getElementById(codeId).value;
+    const lines = code.split('\\n');
+    const out = [];
+    lines.forEach(line=>{
+      const m = line.match(/Serial\\.println\\((.*)\\)/);
+      if(m){ try{ out.push(evalSafe(m[1])); } catch(e){ out.push(m[1].replace(/['"]/g,'')); } }
+    });
+    const outArea = document.getElementById(outId);
+    if(!outArea) return;
+    outArea.textContent = '';
+    let i = 0;
+    clearInterval(simTimer);
+    simTimer = setInterval(()=>{ if(i < out.length) outArea.textContent += out[i] + '\\n'; else { clearInterval(simTimer); simTimer = null; } i++; }, 600);
+  }
+  function evalSafe(expr){ try{ return Function('"use strict";return ('+expr+')')(); }catch(e){ return String(expr).replace(/['"]/g,''); } }
+  function downloadLessonCode(codeId, filename){ const blob = new Blob([document.getElementById(codeId).value], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click(); }
+  function explainCode(codeId){ const excerpt = document.getElementById(codeId).value.slice(0,600); addBotMessage('You asked for explanation (excerpt): ' + excerpt, 'me'); setTimeout(()=>{ addBotMessage('AI Tutor: This code toggles an LED on pin 13 and prints status with Serial.println. setup() runs once; loop() repeats.', 'bot'); },700); }
+
+  // quick simulator on right
+  let _qi = null;
+  function runQuick(){ const code = document.getElementById('quickCode').value; const out = []; code.split('\\n').forEach(l=>{ const m = l.match(/Serial\\.println\\((.*)\\)/); if(m){ try{ out.push(evalSafe(m[1])); } catch(e){ out.push(m[1].replace(/['"]/g,'')); } } }); const area = document.getElementById('quickOut'); area.textContent = ''; let i=0; clearInterval(_qi); _qi = setInterval(()=>{ if(i<out.length) area.textContent += out[i] + '\\n'; else clearInterval(_qi); i++; }, 600); }
+  function stopQuick(){ clearInterval(_qi); }
+
+  // community posts
+  function postCommunity(){
+    const name = document.getElementById('yourName').value.trim() || 'Guest';
+    const text = document.getElementById('yourPost').value.trim();
+    const file = document.getElementById('yourPic').files[0];
+    if(!text && !file) return alert('Write something or choose an image');
+    if(file){
+      const fr = new FileReader();
+      fr.onload = e => {
+        state.community.unshift({name, text, img: e.target.result, time: Date.now()});
+        saveState(); document.getElementById('yourPost').value=''; document.getElementById('yourPic').value='';
+      };
+      fr.readAsDataURL(file);
+    } else {
+      state.community.unshift({name, text, img: '', time: Date.now()});
+      saveState(); document.getElementById('yourPost').value='';
     }
+  }
+  function renderCommunity(){ const feed = document.getElementById('communityFeed'); if(!feed) return; feed.innerHTML=''; (state.community || []).forEach(p=>{ const d = document.createElement('div'); d.className='comment'; d.innerHTML = `<strong>${escapeHtml(p.name)}</strong> <div class="small">${timeAgo(p.time)}</div><div style="margin-top:6px">${escapeHtml(p.text)}</div>${p.img?`<img src="${p.img}" style="width:100%;margin-top:8px;border-radius:8px">`:''}`; feed.appendChild(d); }); }
+  function clearCommunity(){ state.community = []; saveState(); }
 
-    // small in-page roboticsLessons & quiz implementations when app.js not loaded yet
-    const roboticsLessons = [
-      {id:'r1',title:'Intro to Robotics',content:'Robotics = sensors + actuators + control.'},
-      {id:'r2',title:'Electronics Basics',content:'Voltage, current, breadboard basics.'},
-      {id:'r3',title:'Arduino Basics',content:'IDE, Blink, wiring.'},
-      {id:'r4',title:'Sensors',content:'Ultrasonic, IR, LDR, DHT.'},
-      {id:'r5',title:'Actuators & Motors',content:'DC motors, servos, motor drivers.'},
-      {id:'r6',title:'Projects: Line Follower',content:'IR sensors + code.'},
-      {id:'r7',title:'Projects: Obstacle Avoider',content:'HC-SR04 + code.'},
-      {id:'r8',title:'Advanced: Vision & ML',content:'Pi + OpenCV.'}
-    ];
+  // multi-question quiz
+  const multi = [
+    {q:'Which sensor uses sound to measure distance?', opts:['Infrared','Ultrasonic','Temperature'], a:1},
+    {q:'Which pin number is the built-in LED on Arduino UNO?', opts:['12','13','A0'], a:1},
+    {q:'What does PWM control on a motor?', opts:['Speed','Color','Memory'], a:0},
+    {q:'Which library is used for computer vision in Python?', opts:['OpenCV','Matplotlib','Requests'], a:0}
+  ];
+  function renderMultiQuiz(){
+    const wrap = document.getElementById('multiQuiz'); if(!wrap) return; wrap.innerHTML='';
+    multi.forEach((m, idx)=>{
+      const div = document.createElement('div'); div.className='panel'; div.style.marginBottom='8px';
+      let html = `<div><strong>${idx+1}. ${m.q}</strong></div>`;
+      m.opts.forEach((opt, i)=> html += `<button class="qbtn" onclick="checkMulti(${idx},${i})">${opt}</button>`);
+      div.innerHTML = html; wrap.appendChild(div);
+    });
+  }
+  function checkMulti(qIdx,optIdx){
+    if(multi[qIdx].a === optIdx){ state.score = (state.score||0)+5; saveState(); playTone('win'); alert('Correct — +5 points!'); }
+    else { playTone('error'); alert('Not right — review the lesson and try again.'); }
+  }
 
-    function renderRobotQuiz(){
-      const el = document.getElementById('robotQuiz');
-      el.innerHTML = '<div>Which sensor uses sound to measure distance?</div><div style="margin-top:8px"><button class="btn small" onclick="alertAnswer(true)">Ultrasonic (HC-SR04)</button> <button class="btn small ghost" onclick="alertAnswer(false)">IR sensor</button></div>';
-    }
-    function alertAnswer(ok){ if(ok) alert('Correct!'); else alert('Not correct — try again.'); }
+  // leaderboard (local)
+  function updateLeaderboard(){
+    const name = localStorage.getItem('rg_user') || prompt('Enter display name (or press Cancel)', 'Guest') || 'Guest';
+    localStorage.setItem('rg_user', name);
+    state.leaderboard = state.leaderboard || [];
+    const idx = state.leaderboard.findIndex(x=>x.name===name);
+    if(idx === -1) state.leaderboard.push({name, score: state.score||0});
+    else state.leaderboard[idx].score = state.score||0;
+    state.leaderboard.sort((a,b)=>b.score-a.score);
+    saveState();
+  }
+  function renderLeaderboard(){ const el = document.getElementById('leaderboard'); if(!el) return; el.innerHTML=''; (state.leaderboard||[]).slice(0,10).forEach((p,i)=> el.innerHTML += `<div class="small">${i+1}. <strong>${escapeHtml(p.name)}</strong> — ${p.score} pts</div>`); }
 
-    // call render on load
-    document.addEventListener('DOMContentLoaded', ()=>{ renderRoboticsPage(); });
+  // certificate
+  function updateCertCanvas(){
+    const c = document.getElementById('certCanvas'); if(!c) return; const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#012'; ctx.fillRect(6,6,c.width-12,c.height-12);
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
+    ctx.font = '18px Arial'; ctx.fillText('Robo Genius Certificate', c.width/2, 40);
+    ctx.font = '12px Arial'; ctx.fillText('Awarded to', c.width/2, 70);
+    const name = localStorage.getItem('rg_user') || 'Learner';
+    ctx.font = 'bold 16px Arial'; ctx.fillText(name, c.width/2, 98);
+    ctx.font = '11px Arial'; ctx.fillText('For progress in Robotics Academy', c.width/2, 130);
+  }
+  function previewCert(){ updateCertCanvas(); alert('Certificate previewed. If you have completed enough lessons, click Download.'); }
+  function downloadCert(){
+    const done = Object.keys(state.progress || {}).length;
+    if(done < 7) return alert('Complete at least 7 lessons to download the certificate. You have ' + done + ' completed.');
+    const c = document.getElementById('certCanvas'); const a = document.createElement('a');
+    a.href = c.toDataURL('image/png'); a.download = 'RoboGenius-Certificate.png'; a.click();
+    playTone('win'); alert('Congrats! Certificate downloaded.');
+  }
+
+  // sound
+  function playTone(kind){
+    try{
+      const map = {win:880, error:220, ping:1400};
+      const ac = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator();
+      const g = ac.createGain();
+      o.frequency.value = map[kind] || 600; o.type='sine';
+      o.connect(g); g.connect(ac.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.3);
+      setTimeout(()=>{ o.stop(); ac.close(); }, 350);
+    } catch(e){}
+  }
+
+  // mentor rules (AI-style replies)
+  const mentorRules = [
+    {re:/wire.*hc-?sr04/i, a:'Wiring: Vcc → 5V, GND → GND, Trig → digital out, Echo → digital in (use pulseIn to read).'},
+    {re:/blink|led|pin 13/i, a:'Blink uses digital pin 13 on the UNO. Use pinMode(13, OUTPUT) and digitalWrite to toggle.'},
+    {re:/motor driver|l298n|tb6612/i, a:'Use EN pins for PWM speed and IN pins for direction. Power motors from battery; driver Vcc to logic 5V.'},
+    {re:/how do i start|where to start/i, a:'Start small: Blink → Reading a sensor → Controlling a motor → Building a line follower. Practice one step at a time.'},
+    {re:/open.?cv|vision/i, a:'Start with reading frames from a camera, then apply color thresholding or contours. OpenCV docs and sample tutorials will help.'},
+    {re:/certificate|download/i, a:'Complete at least 7 lessons (progress bar) and then use the Download button on the right to get your certificate.'}
+  ];
+
+  function addBotMessage(text, who){
+    const box = document.getElementById('botChat'); if(!box) return;
+    const d = document.createElement('div'); d.className='comment';
+    d.style.background = who==='me' ? 'linear-gradient(90deg, var(--accent), var(--accent2))' : '#0f2136';
+    d.style.color = who==='me' ? '#012' : 'var(--text)';
+    d.innerHTML = `<div class="small">${who==='me' ? 'You' : 'BrentBot'}</div><div style="margin-top:6px">${escapeHtml(text)}</div>`;
+    box.appendChild(d); box.scrollTop = box.scrollHeight;
+  }
+
+  function askBot(){
+    const input = document.getElementById('botInput'); const q = input.value.trim(); if(!q) return;
+    addBotMessage(q,'me'); input.value='';
+    setTimeout(()=>{ let reply = "I'm BrentBot (AI Tutor). Try asking wiring, code or project questions. If I can't answer, check the lessons."; for(const r of mentorRules) if(r.re.test(q)) { reply = r.a; break; } addBotMessage(reply,'bot'); playTone('ping'); }, 700);
+  }
+
+  // floating button behavior
+  const smileyBtn = document.getElementById('smileyBtn');
+  const chatPanel = document.getElementById('chatPanel');
+  const closeChat = document.getElementById('closeChat');
+  const askBtn = document.getElementById('askBtn');
+
+  smileyBtn.addEventListener('click', () => {
+    chatPanel.style.display = 'block';
+    document.getElementById('botInput').focus();
+    playTone('ping');
+  });
+  closeChat.addEventListener('click', ()=>{ chatPanel.style.display = 'none'; });
+  askBtn.addEventListener('click', askBot);
+  document.getElementById('botInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') askBot(); });
+
+  // install prompt (PWA)
+  window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); window.deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-block'; });
+  function promptInstall(){ if(window.deferredPrompt){ window.deferredPrompt.prompt(); window.deferredPrompt.userChoice.then(()=>{ window.deferredPrompt = null; document.getElementById('installBtn').style.display='none'; }); } }
+
+  // sample download (dummy PDF)
+  function downloadSample(name){
+    const blob = new Blob(['Sample wiring guide — replace with your real PDF'], {type:'application/pdf'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  }
+
+  // reset and award demo badge
+  function resetAll(){ if(confirm('Reset all progress & badges?')){ state = {progress:{}, badges:[], score:0, community: [], leaderboard: state.leaderboard || []}; saveState(); alert('Reset done'); } }
+  function awardSampleBadge(){ if(!state.badges.includes('Demo')) state.badges.push('Demo'); saveState(); }
+
+  // save and UI init
+  function saveState(){ localStorage.setItem(RK, JSON.stringify(state)); renderProgress(); renderBadges(); renderCommunity(); renderLeaderboard(); updateCertCanvas(); }
+  function renderBadges(){ const el = document.getElementById('badges'); if(!el) return; el.innerHTML=''; (state.badges||[]).forEach(b=>{ const d=document.createElement('div'); d.className='badge'; d.textContent=b; el.appendChild(d); }); }
+  function renderProgress(){ const total = document.querySelectorAll('.lesson').length || 1; const done = Object.keys(state.progress || {}).length; const pct = Math.round(done/total*100); const bar = document.getElementById('progressBar'); if(bar) bar.style.width = pct + '%'; }
+  function renderCommunity(){ const feed = document.getElementById('communityFeed'); if(!feed) return; feed.innerHTML=''; (state.community||[]).forEach(p=>{ const d = document.createElement('div'); d.className='comment'; d.innerHTML=`<strong>${escapeHtml(p.name)}</strong> <div class="small">${timeAgo(p.time)}</div><div style="margin-top:6px">${escapeHtml(p.text)}</div>${p.img?`<img src="${p.img}" style="width:100%;margin-top:8px;border-radius:8px">`:''}`; feed.appendChild(d); }); }
+  function renderLeaderboard(){ const el = document.getElementById('leaderboard'); if(!el) return; el.innerHTML=''; (state.leaderboard||[]).slice(0,10).forEach((p,i)=> el.innerHTML += `<div class="small">${i+1}. <strong>${escapeHtml(p.name)}</strong> — ${p.score} pts</div>`); }
+
+  // initial render
+  document.addEventListener('DOMContentLoaded', ()=>{ renderProgress(); renderBadges(); renderCommunity(); renderLeaderboard(); updateCertCanvas(); renderMultiQuiz(); updateCertCanvas(); });
+
+  // expose functions globally for buttons
+  window.pageAnswer = pageAnswer;
+  window.simulateLessonCode = simulateLessonCode;
+  window.downloadLessonCode = downloadLessonCode;
+  window.explainCode = explainCode;
+  window.runQuick = runQuick;
+  window.stopQuick = stopQuick;
+  window.postCommunity = postCommunity;
+  window.clearCommunity = clearCommunity;
+  window.previewCert = previewCert;
+  window.downloadCert = downloadCert;
+  window.awardSampleBadge = awardSampleBadge;
+  window.resetAll = resetAll;
+  window.askBot = askBot;
+
+  // ensure multi quiz rendered
+  function renderMultiQuiz(){ /* uses earlier function definition */ }
+  renderMultiQuiz();
+
+  // register service worker (optional)
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
   </script>
 </body>
 </html>
